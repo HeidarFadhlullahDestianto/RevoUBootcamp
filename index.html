@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Life Dashboard</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ========== TOP BAR ========== -->
+  <header class="topbar">
+    <span class="topbar-title">🗂️ Life Dashboard</span>
+    <div class="topbar-controls">
+      <button class="btn-icon" id="themeToggleBtn" title="Toggle theme" aria-label="Toggle dark/light mode">🌙</button>
+    </div>
+  </header>
+
+  <!-- ========== DASHBOARD GRID ========== -->
+  <main class="dashboard" aria-label="Dashboard">
+
+    <!-- ---- GREETING ---- -->
+    <section class="widget widget-greeting" aria-label="Greeting and clock">
+      <div class="widget-body">
+        <div class="greeting-left">
+          <div id="greetingText" aria-live="polite">Good Morning!</div>
+          <div id="greetingDate"></div>
+          <div class="name-row">
+            <span id="nameDisplay">👤 Guest</span>
+            <button class="btn-edit-name" id="editNameBtn" aria-label="Edit your name">Edit name</button>
+          </div>
+          <!-- Challenge: Custom name input -->
+          <div class="name-input-row" id="nameInputRow" role="form" aria-label="Set your name">
+            <input type="text" id="nameInput" placeholder="Your name…" maxlength="30"
+                   aria-label="Enter your name" />
+            <button class="btn-save-name" id="saveNameBtn">Save</button>
+            <button class="btn-cancel-name" id="cancelNameBtn">Cancel</button>
+          </div>
+        </div>
+        <div class="greeting-right">
+          <div id="clockTime" aria-live="off" aria-label="Current time">00:00</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---- FOCUS TIMER ---- -->
+    <section class="widget" aria-label="Focus timer">
+      <div class="widget-header">
+        <h2>⏱️ Focus Timer</h2>
+      </div>
+      <div class="widget-body">
+        <div class="timer-ring-wrap">
+          <!-- SVG ring progress -->
+          <svg class="timer-ring-svg" viewBox="0 0 160 160" aria-hidden="true">
+            <circle class="timer-ring-bg"       cx="80" cy="80" r="70" />
+            <circle class="timer-ring-progress" id="timerProgress" cx="80" cy="80" r="70" />
+            <text class="timer-ring-text"  x="80" y="76" id="timerDisplay">25:00</text>
+            <text class="timer-label-svg"  x="80" y="98" id="timerLabel">25 min focus</text>
+          </svg>
+
+          <!-- Controls -->
+          <div class="timer-controls">
+            <button class="btn-timer btn-start" id="timerStart" aria-label="Start timer">▶ Start</button>
+            <button class="btn-timer btn-stop"  id="timerStop"  aria-label="Pause timer">⏸ Pause</button>
+            <button class="btn-timer btn-reset" id="timerReset" aria-label="Reset timer">↺ Reset</button>
+          </div>
+
+          <!-- Challenge: Change Pomodoro time -->
+          <div class="timer-custom">
+            <label for="timerDurationInput">Duration (min):</label>
+            <input type="number" id="timerDurationInput" min="1" max="180" value="25"
+                   aria-label="Set timer duration in minutes" />
+            <button class="btn-set-duration" id="setDurationBtn">Set</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ---- TO-DO LIST ---- -->
+    <section class="widget" aria-label="To-do list">
+      <div class="widget-header">
+        <h2>📋 To-Do List</h2>
+      </div>
+      <div class="widget-body">
+
+        <!-- Stats -->
+        <div class="todo-stats" aria-label="Task statistics">
+          <div class="todo-stat">
+            <div class="todo-stat-num" id="statTotal">0</div>
+            <div class="todo-stat-label">Total</div>
+          </div>
+          <div class="todo-stat">
+            <div class="todo-stat-num" id="statActive">0</div>
+            <div class="todo-stat-label">Active</div>
+          </div>
+          <div class="todo-stat">
+            <div class="todo-stat-num" id="statDone">0</div>
+            <div class="todo-stat-label">Done</div>
+          </div>
+        </div>
+
+        <!-- Input -->
+        <div class="todo-input-row">
+          <input type="text" id="todoInput" placeholder="Add a new task…" maxlength="120"
+                 aria-label="New task input" />
+          <button class="btn-add-todo" id="todoAddBtn" title="Add task" aria-label="Add task">+</button>
+        </div>
+        <!-- Challenge: Prevent duplicate warning -->
+        <div class="dup-toast" id="dupMessage" role="alert" aria-live="polite"></div>
+
+        <!-- Filter + Sort toolbar (Challenge: Sort tasks) -->
+        <div class="todo-toolbar" role="group" aria-label="Filter and sort tasks">
+          <button class="filter-btn active" data-filter="all">All</button>
+          <button class="filter-btn" data-filter="active">Active</button>
+          <button class="filter-btn" data-filter="done">Done</button>
+          <button class="sort-btn" id="sortBtn" aria-label="Sort tasks">⇅ Sort</button>
+        </div>
+
+        <!-- List -->
+        <div class="todo-list" id="todoList" role="list" aria-label="Task list"></div>
+      </div>
+
+      <!-- Footer -->
+      <div class="todo-footer">
+        <span id="todoFooter">No tasks yet</span>
+        <button class="btn-clear-done" id="clearDoneBtn">Clear done</button>
+      </div>
+    </section>
+
+    <!-- ---- QUICK LINKS ---- -->
+    <section class="widget" aria-label="Quick links">
+      <div class="widget-header">
+        <h2>🔗 Quick Links</h2>
+      </div>
+      <div class="widget-body">
+        <div class="links-grid" id="linksGrid" role="list" aria-label="Saved links"></div>
+
+        <button class="btn-add-link" id="addLinkBtn" aria-label="Add new quick link">
+          + Add Link
+        </button>
+
+        <!-- Add link form -->
+        <div class="add-link-form" id="addLinkForm" role="form" aria-label="New link form">
+          <input type="text"  id="linkNameInput" placeholder="Label (e.g. Google)"    maxlength="30"
+                 aria-label="Link label" />
+          <input type="url"   id="linkUrlInput"  placeholder="URL (e.g. google.com)"  maxlength="200"
+                 aria-label="Link URL" />
+          <input type="text"  id="linkIconInput" placeholder="Emoji icon (e.g. 🔍) — optional" maxlength="4"
+                 aria-label="Link emoji icon (optional)" />
+          <div class="add-link-row">
+            <button class="btn-save-link"   id="saveLinkBtn">Save Link</button>
+            <button class="btn-cancel-link" id="cancelLinkBtn">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
